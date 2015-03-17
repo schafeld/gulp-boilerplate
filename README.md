@@ -3,9 +3,13 @@ Gulp boilerplate (Foundation) script for website projects.
 
 
 #Installation
+
   git clone {this repository}
+
   npm install
+
   npm install gulp-changed --save-dev
+
   (individual installs as necessary)
 
 
