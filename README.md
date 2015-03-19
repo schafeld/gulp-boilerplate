@@ -13,6 +13,13 @@ Gulp boilerplate (Foundation) script for website projects.
   (individual installs as necessary)
 
 
+#Usage
+
+gulp style
+  will minify css
+
+
+
 #Sources, Docs
 
 http://mo.phlow.de/gulp/
