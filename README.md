@@ -10,7 +10,13 @@ Gulp boilerplate (Foundation) script for website projects.
 
   npm install gulp-changed --save-dev
 
-  (individual installs as necessary)
+  sudo npm install gulp-sass --save-dev
+
+  sudo npm install gulp-plumber --save-dev
+
+  sudo npm install gulp-typescript --save-dev
+
+  (Install individual Gulp modules as necessary if you get errors on running gulp, see examples above)
 
 
 #Usage

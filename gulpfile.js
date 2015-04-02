@@ -3,10 +3,10 @@
 // gulp images
 
 
-// gulp.js einbauen
+// require gulp.js
 var gulp = require('gulp');
 
-// Plugins einbauen
+// require plugins
 var changed = require('gulp-changed'),
     jshint = require ('gulp-jshint'),
     concat = require ('gulp-concat'),
@@ -17,8 +17,38 @@ var changed = require('gulp-changed'),
     minifyhtml = require ('gulp-minify-html'),
     autoprefixer = require ('gulp-autoprefixer'),
     minifyCSS = require ('gulp-minify-css'),
-    sass = require('gulp-sass');
+    sass = require('gulp-sass'),
+    ts = require('gulp-typescript'),
+    plumber = require('gulp-plumber');
 
+// set directory paths
+// not yet properly corresponding with the js paths...
+var tsPath = './src/ts/*.ts',
+    compilePath = './src/js/compiled',
+    dist = 'js/dist';
+
+// Compress TypeScript scripts
+gulp.task('compressScripts', function() {
+    gulp.src([
+        compilePath + '/typescript/*.js'
+        ])
+    .pipe(plumber())
+    .pipe(concat('scripts.min.js'))
+    .pipe(uglify())
+    pipe(gulp.dest(dist));
+});
+
+// Compile TypeScript
+gulp.task('typescript', function() {
+    var tsResult = gulp.src(tsPath)
+    .pipe(ts({
+        target: 'ES5',
+        declarationFiles: false,
+        noExternalResolve: true
+    }));
+    tsResult.dts.pipe(gulp.dest(compilePath + '/tsdefinitions'));
+    return tsResult.js.pipe(gulp.dest(compilePath + '/typescript'));
+});
 
 // Compress images
 gulp.task('images', function() {
@@ -66,8 +96,9 @@ gulp.task('scripts', function() {
 gulp.task('watch', function() {
     gulp.watch('./src/js/*.js', ['lint', 'scripts']);
     gulp.watch('scss/*.scss', ['sass']);
-    gulp.watch('./src/css/*.css', ['style']);
+    gulp.watch('./src/css/*.css', ['style']),
+    gulp.watch([tsPath], ['typescript']);
 });
 
 // Default Task
-gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
+gulp.task('default', ['typescript', 'lint', 'sass', 'scripts', 'watch']);
