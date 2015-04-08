@@ -14,7 +14,8 @@ var changed = require('gulp-changed'),
     minifyCSS = require ('gulp-minify-css'),
     sass = require('gulp-sass'),
     ts = require('gulp-typescript'),
-    plumber = require('gulp-plumber');
+    plumber = require('gulp-plumber'),
+    notify  = require('gulp-notify');
 
 // set directory paths
 // not yet properly corresponding with the js paths...
@@ -45,7 +46,8 @@ gulp.task('typescript', function() {
         target: 'ES5',
         declarationFiles: false,
         noExternalResolve: true
-    }));
+    }))
+    .pipe(notify({ message: 'TypeScript compiled to JavaScript.' }));
     tsResult.dts.pipe(gulp.dest(compilePath + '/tsdefinitions'));
     return tsResult.js.pipe(gulp.dest(compilePath + '/typescript'));
 });
