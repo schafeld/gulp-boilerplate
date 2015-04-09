@@ -1,3 +1,7 @@
+// Examples for installing required plugins:
+// npm install gulp-ruby-sass gulp-autoprefixer gulp-minify-css gulp-jshint gulp-concat gulp-uglify gulp-imagemin gulp-notify gulp-rename gulp-livereload gulp-cache del --save-dev
+// sudo npm install gulp-livereload --save-dev
+
 // require gulp.js
 var gulp = require('gulp');
 
@@ -15,6 +19,7 @@ var changed = require('gulp-changed'),
     sass = require('gulp-sass'),
     ts = require('gulp-typescript'),
     plumber = require('gulp-plumber'),
+    livereload = require('gulp-livereload'),
     notify  = require('gulp-notify');
 
 // set directory paths
@@ -113,10 +118,21 @@ gulp.task('scripts', function() {
 
 // Watch Files For Changes
 gulp.task('watch', function() {
+
     gulp.watch('./src/js/*.js', ['lint', 'scripts']);
     gulp.watch('./src/scss/*.scss', ['sass']);
     gulp.watch('./src/css/*.css', ['style']),
     gulp.watch([tsPath], ['typescript']);
+
+    // Create LiveReload server
+    livereload.listen();
+    // Watch any files in dist/, reload on change
+    // Notice: You need the LiveReload browser extension and
+    // you have to call the HTML file inside the watched directory through
+    // a local server, i.e.
+    // cd build/ && python -m SimpleHTTPServer
+    gulp.watch(['build/**']).on('change', livereload.changed);
+
 });
 
 // Default Task
