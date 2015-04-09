@@ -47,7 +47,7 @@ gulp.task('typescript', function() {
         declarationFiles: false,
         noExternalResolve: true
     }))
-    .pipe(notify({ message: 'TypeScript compiled to JavaScript.' }));
+    // .pipe(notify({ message: 'TypeScript compiled to JavaScript.' }));
     tsResult.dts.pipe(gulp.dest(compilePath + '/tsdefinitions'));
     return tsResult.js.pipe(gulp.dest(compilePath + '/typescript'));
 });
