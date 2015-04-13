@@ -1,6 +1,7 @@
 // Examples for installing required plugins:
 // npm install gulp-ruby-sass gulp-autoprefixer gulp-minify-css gulp-jshint gulp-concat gulp-uglify gulp-imagemin gulp-notify gulp-rename gulp-livereload gulp-cache del --save-dev
 // sudo npm install gulp-livereload --save-dev
+// npm i -D gulp-connect  is same as   npm install --save-dev gulp-connect
 
 // require gulp.js
 var gulp = require('gulp');
@@ -20,6 +21,7 @@ var changed = require('gulp-changed'),
     ts = require('gulp-typescript'),
     plumber = require('gulp-plumber'),
     livereload = require('gulp-livereload'),
+    connect = require('gulp-connect'),
     notify  = require('gulp-notify');
 
 // set directory paths
@@ -116,6 +118,16 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest('dist'));
 });
 
+// Node Web Server for proper Live Reload capability
+// This web server mounts the file structure of the folder, where the gulpfile.js lives in,
+// to the root of localhost:8080.
+// The server will run until you stop the task by pressing Ctrl + c on your keyboard.
+gulp.task('webserver', function() {
+    connect.server({
+        livereload: true
+    });
+});
+
 // Watch Files For Changes
 gulp.task('watch', function() {
 
@@ -124,16 +136,19 @@ gulp.task('watch', function() {
     gulp.watch('./src/css/*.css', ['style']),
     gulp.watch([tsPath], ['typescript']);
 
-    // Create LiveReload server
+    // Create LiveReload listener
     livereload.listen();
-    // Watch any files in dist/, reload on change
-    // Notice: You need the LiveReload browser extension and
+    // Watch any files in build/, reload on change
+    // Notice: You need the LiveReload browser extension running and
     // you have to call the HTML file inside the watched directory through
     // a local server, i.e.
     // cd build/ && python -m SimpleHTTPServer
+    // open http://localhost:8000/index.html
     gulp.watch(['build/**']).on('change', livereload.changed);
 
 });
 
 // Default Task
 gulp.task('default', ['typescript', 'lint', 'sass', 'scripts', 'watch']);
+// Live Reload task: gulp lr
+gulp.task('lr', ['webserver', 'typescript', 'lint', 'sass', 'scripts', 'watch']);
