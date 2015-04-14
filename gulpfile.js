@@ -18,6 +18,7 @@ var changed = require('gulp-changed'),
     autoprefixer = require ('gulp-autoprefixer'),
     minifyCSS = require ('gulp-minify-css'),
     sass = require('gulp-sass'),
+    less = require('gulp-less'),
     ts = require('gulp-typescript'),
     plumber = require('gulp-plumber'),
     livereload = require('gulp-livereload'),
@@ -83,7 +84,8 @@ gulp.task('lint', function() {
         .pipe(jshint.reporter('default'));
 });
 
-// Compile Our Sass
+// Compile Sass
+// Usually Less OR Sass would be used.
 gulp.task('sass', function() {
   var sassSrc = 'src/scss/*.scss',
       sassDst = 'src/css/';
@@ -93,6 +95,15 @@ gulp.task('sass', function() {
         }))
         .pipe(sass())
         .pipe(gulp.dest(sassDst));
+});
+
+// Compile Less
+// Usually Less OR Sass would be used.
+gulp.task('less', function() {
+  gulp.src('./src/less/main.less')
+    .pipe(less())
+    .pipe(gulp.dest('./build/css'))
+    .pipe(connect.reload());
 });
 
 // Minify CSS
@@ -122,6 +133,7 @@ gulp.task('scripts', function() {
 // This web server mounts the file structure of the folder, where the gulpfile.js lives in,
 // to the root of localhost:8080.
 // The server will run until you stop the task by pressing Ctrl + c on your keyboard.
+// http://localhost:8080/build/
 gulp.task('webserver', function() {
     connect.server({
         livereload: true
@@ -132,7 +144,10 @@ gulp.task('webserver', function() {
 gulp.task('watch', function() {
 
     gulp.watch('./src/js/*.js', ['lint', 'scripts']);
+    // Just for the exercise I use both Less and Sass.
     gulp.watch('./src/scss/*.scss', ['sass']);
+    gulp.watch('./src/less/*.less', ['less']);
+
     gulp.watch('./src/css/*.css', ['style']),
     gulp.watch([tsPath], ['typescript']);
 
@@ -149,6 +164,6 @@ gulp.task('watch', function() {
 });
 
 // Default Task
-gulp.task('default', ['typescript', 'lint', 'sass', 'scripts', 'watch']);
+gulp.task('default', ['typescript', 'lint', 'less', 'sass', 'scripts', 'watch']);
 // Live Reload task: gulp lr
-gulp.task('lr', ['webserver', 'typescript', 'lint', 'sass', 'scripts', 'watch']);
+gulp.task('lr', ['webserver', 'typescript', 'lint', 'less', 'sass', 'scripts', 'watch']);
