@@ -34,7 +34,7 @@ var tsPath = './src/ts/*.ts',
 // Use plumber for error output to console:
 var onError = function(err) {
     console.log(err);
-}
+};
 
 // Compress TypeScript scripts
 gulp.task('compressScripts', function() {
@@ -44,7 +44,7 @@ gulp.task('compressScripts', function() {
     .pipe(plumber())
     .pipe(concat('scripts.min.js'))
     .pipe(uglify())
-    pipe(gulp.dest(dist));
+    .pipe(gulp.dest(dist));
 });
 
 // Compile TypeScript
@@ -54,7 +54,7 @@ gulp.task('typescript', function() {
         target: 'ES5',
         declarationFiles: false,
         noExternalResolve: true
-    }))
+    }));
     // .pipe(notify({ message: 'TypeScript compiled to JavaScript.' }));
     tsResult.dts.pipe(gulp.dest(compilePath + '/tsdefinitions'));
     return tsResult.js.pipe(gulp.dest(compilePath + '/typescript'));
